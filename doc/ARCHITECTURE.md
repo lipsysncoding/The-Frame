@@ -13,7 +13,15 @@
 4. Security
    - API Key는 절대 클라이언트 코드에 하드코딩하지 않으며, local.properties나 서버 프록시를 통해 관리합니다.
 
+## Develop Principles
+1. 작은 단위로 코드를 생성하고 빌드.
+2. 빌드 오류 발생시 오류 수정 후 재빌드.
+3. 테스트 코드 작성하여 테스트 수행.
+4. 점진적으로 코드 생성 후 빌드와 테스트를 수행.
+
 ## 앱 구조
+- 안드로이드 개발자 사이트의 앱 아키텍츠 가이드라인을 따름. 
+  - https://developer.android.com/topic/architecture/intro?_gl=1*1fzy5y0*_up*MQ..*_ga*MTg4MjE3NDIzNC4xNzY5MTYwMTg3*_ga_6HH9YJMN9M*czE3NjkxNjAxODckbzEkZzAkdDE3NjkxNjAyNDIkajUkbDAkaDg3NTA1OTE0Mw..
 - UI
   - com.lib.syncoding.the.frame.ui 패키지에 생성.
   - 각 UI는 재활용이 가능하고 일관성 유지를 위해 컴포넌트화 하여 생성.
@@ -29,3 +37,6 @@
 - Language: Kotlin (Coroutines + Flow)
 - Local DB: Room
 - UI: Compose
+- Android 개발자 사이트를 참고
+  - https://developer.android.com/
+
