@@ -40,7 +40,7 @@
 - Settings -> Google Photo Login
 
 ## Detail of Each View
-## 1. IntroActivity (App Entry Point)
+### 1. IntroActivity (App Entry Point)
 - **Role:** The first impression of the app. Introduces the "Digital Photo Frame" concept and secures necessary permissions.
 - **Design Intent:** Use high-impact comic-style visuals to make the "Photo Frame" concept intuitive.
 
@@ -64,17 +64,59 @@
     - When the user clicks "Get Started," show the system permission dialogs sequentially.
     - Use a bouncy animation on the button to match the comic theme.
 
-### SettingsActivity
-- 역할: 앱의 기능 설정 화면
-- 상세
-  - 다음 사진이 변경 될 때 적용이 될 이펙트 리스트
-  - 이펙트 적용 시간 설정
-  - 사진 표시 시간 설정
-  - 이펙트 적용 효과 미리보기 화면 표시
-  - 구글 포토 연동 설정
+### 2. SettingsActivity
+- **Role:** The central hub for configuring the digital photo frame experience and managing Google Photos integration.
+- **Design Intent:** Use organized "Comic-style Cards" to group related settings. Use pastel color accents to distinguish between different types of controls (e.g., toggles, sliders, and pickers).
 
-### PhotoViewActivity
-- 역할: 앱의 메인 기능 화면
-- 상세
-  - 설정된 사진을 표시
-  - 설정에 적용된 효과 값에 맞게 동작
+- **Layout Structure:**
+    1. **Top Section (Google Photos Integration Card):**
+        - **Status Display:** A prominent card showing connection status (e.g., "Linked to [User Name]" or "Not Connected").
+        - **Album Selection:** If connected, show a list of selected albums with thumbnail previews.
+        - **Action Button:** A bold "Link/Unlink" button. Use a cloud icon with a thick outline.
+
+    2. **Middle Section (Main Configuration List):**
+        - **Transition Effects:** - A dropdown or scrollable list of effect names (e.g., Fade, Slide, Zoom).
+            - Each item should have a small comic-style icon representing the motion.
+        - **Timing Controls (Sliders):**
+            - **Effect Duration:** How long the transition lasts.
+            - **Photo Interval:** How long each photo stays on screen.
+            - *Visual:* Use pastel-colored sliders with thick black borders for the thumb/handle.
+
+    3. **Visual Preview Section (Real-time Feedback):**
+        - **Preview Frame:** A mini comic-style photo frame showing a dummy image.
+        - **Function:** When an effect or timing is changed, this preview immediately reflects the change so the user can see the result before applying.
+
+    4. **Bottom Section:**
+        - **Save/Apply Button:** A large "Apply Changes" button with a 'POW!' style visual feedback when clicked.
+
+- **Interaction & Logic:**
+    - **UDF Pattern:** Any change in the settings should update the `SettingsUiState` in the ViewModel.
+    - **Instant Preview:** The preview frame must be reactive to the StateFlow values of the timing and effect selections.
+    - **Error Handling:** If Google Photos fails to sync, show a comic-style alert bubble with an "Oops!" message.
+      드디어 이 앱의 주인공인 PhotoViewActivity 스펙이군요! '코믹 파스텔' 컨셉을 유지하면서도, 사진 자체가 돋보여야 하는 화면이기에 몰입감과 직관적인 메뉴 노출이 핵심입니다.
+
+### 3. PhotoViewActivity
+- **Role:** The core functional screen that acts as the "Digital Photo Frame." It displays photos based on the user's settings.
+- **Design Intent:** Full-screen immersion for the photos, with a "Comic-style Overlay Menu" that appears only when needed.
+
+- **Layout Structure:**
+    1. **Main Display Area:**
+        - **Full-Screen Canvas:** Displays local or Google Photos images.
+        - **Dynamic Transitions:** Photos transition according to the `EffectType`, `EffectDuration`, and `PhotoInterval` defined in `SettingsActivity`.
+        - **Visual Style:** Apply a very subtle thick-border frame (like a comic panel) around the edge of the screen to maintain the theme.
+
+    2. **Hidden Overlay Menu (Appears on Tap):**
+        - **Background:** A semi-transparent pastel overlay (e.g., 50% opacity Soft Mint).
+        - **Menu Buttons:**
+            - **Settings Button:** A round comic-style button with a 'Gear' icon. Redirects to `SettingsActivity`.
+            - **Exit Button:** A round button with an 'X' or 'Exit' icon. Closes the activity.
+        - **Visual Feedback:** Buttons should pop in with a "Scale-up" animation when the screen is tapped.
+
+- **Interaction & Logic:**
+    - **Single Tap:** Toggles the visibility of the Overlay Menu.
+    - **Auto-Hide:** The menu should automatically disappear after 5 seconds of inactivity.
+    - **Effect Implementation:** Use Compose's `AnimatedContent` or `Crossfade` to implement the transition effects (Fade, Slide, Zoom) based on the settings data.
+    - **State Management:** The ViewModel should observe the settings repository and update the playback logic in real-time.
+
+- **Special Features:**
+    - **Comic Bubble Toasts:** If a network error occurs while fetching Google Photos, show a small comic speech bubble at the bottom saying "Searching for memories..." or "Signal lost in the Multiverse!"
